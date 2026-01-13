@@ -1,5 +1,77 @@
 # Bright Flutter Technical Test
 
+## Setup Instructions for Reviewers
+
+### Prerequisites
+
+- Flutter SDK (version 2.17.0 or higher)
+- Dart SDK (included with Flutter)
+- Android Studio / Xcode (for mobile development) or VS Code with Flutter extensions
+- An iOS Simulator, Android Emulator, or physical device for testing
+
+### Installation
+
+1. **Clone the repository** (if not already done):
+
+   ```bash
+   git clone <repository-url>
+   cd TechnicalTest.Flutter
+   ```
+
+2. **Install dependencies**:
+
+   ```bash
+   flutter pub get
+   ```
+
+3. **Generate localization files** (if needed):
+   ```bash
+   flutter gen-l10n
+   ```
+   Note: Localization files are auto-generated when you run the app, but you can generate them manually if needed.
+
+### Project Structure
+
+The project follows Clean Architecture principles with the following structure:
+
+```
+lib/
+├── core/              # Core utilities, constants, error handling
+├── data/              # Data layer (datasources, models, repositories)
+├── domain/            # Domain layer (entities, repositories, use cases)
+├── presentation/      # Presentation layer (pages, viewmodels, widgets)
+└── l10n/              # Localization files (English, Spanish, German)
+```
+
+### Key Dependencies
+
+- **flutter_riverpod**: State management and dependency injection
+- **sqflite**: Local database for offline post storage
+- **http**: HTTP client for API calls
+- **dartz**: Functional programming utilities (Either type for error handling)
+- **equatable**: Value equality for entities
+- **mocktail**: Testing utilities for mocking
+
+### Features Implemented
+
+- ✅ Clean Architecture (Domain, Data, Presentation layers)
+- ✅ Localization support (English, Spanish, German) with language switcher
+- ✅ Offline post storage and viewing
+- ✅ Comments viewing
+- ✅ Error handling with user-friendly messages
+- ✅ Comprehensive test coverage (Widget and Unit tests)
+- ✅ Tabbed navigation with badge count for offline posts
+
+### Notes for Reviewers
+
+- The app uses Riverpod for state management and dependency injection
+- Localization can be changed via the language icon in the app bar
+- Offline posts are stored in a local SQLite database
+- All API calls use the JSON Placeholder API (https://jsonplaceholder.typicode.com)
+- Test data is available in the `assets/` folder if API connectivity is an issue
+
+---
+
 ## The Starter Project
 
 This test project uses the JSON placeholder API
@@ -43,32 +115,32 @@ placeholder](https://jsonplaceholder.typicode.com) API to complete the home task
     The tab item for the offline post list screen should be
     badged with the number of offline posts that have been saved.
 
-    Only details about the post have to be available to read offline.  Post
+    Only details about the post have to be available to read offline. Post
     comments do not have to be available offline (but it's a bonus if they are).
 
 ## Provided resources
 
 Included in the starter repository:
 
--   API response bodies so you can complete the test if you're having
-    connection issues. (found under assets/)
--   List of API endpoints you'll need to use for the task (above).
--   You can use standard material icons where icons are appropriate
+- API response bodies so you can complete the test if you're having
+  connection issues. (found under assets/)
+- List of API endpoints you'll need to use for the task (above).
+- You can use standard material icons where icons are appropriate
 
 ## Requirements
 
--   Must be written in latest version of Flutter/Dart.
--   The project should build and run without errors.
--   The project should follow CLEAN architecture.
--   The project must implement localisation ( and also demonstrate it in the application ).
--   Error handling should be considered.
--   You can use whatever extra libraries you like but be prepared to
-    justify your choices.
--   You should provide at least one example of a Widget and a Unit test.
--   You should submit the above as either a compressed git repository (zip file)
-    or a link to your repository on github or similar hosting service.
-    Please commit regularly as you carry out the task and
-    keep the commit history in tact.
+- Must be written in latest version of Flutter/Dart.
+- The project should build and run without errors.
+- The project should follow CLEAN architecture.
+- The project must implement localisation ( and also demonstrate it in the application ).
+- Error handling should be considered.
+- You can use whatever extra libraries you like but be prepared to
+  justify your choices.
+- You should provide at least one example of a Widget and a Unit test.
+- You should submit the above as either a compressed git repository (zip file)
+  or a link to your repository on github or similar hosting service.
+  Please commit regularly as you carry out the task and
+  keep the commit history in tact.
 
 ## Interview pairing tasks
 
