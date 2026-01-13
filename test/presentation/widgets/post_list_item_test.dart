@@ -13,16 +13,13 @@ void main() {
 
   testWidgets('should display post title and body',
       (WidgetTester tester) async {
-    // Arrange
-    bool tapped = false;
-
     // Act
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
           body: PostListItem(
             post: tPost,
-            onTap: () => tapped = true,
+            onTap: () {},
           ),
         ),
       ),

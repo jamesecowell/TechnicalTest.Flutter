@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tech_task/core/error/failures.dart';
 import 'package:flutter_tech_task/core/providers/providers.dart';
+import 'package:flutter_tech_task/presentation/utils/error_message_extractor.dart';
 import 'package:flutter_tech_task/presentation/widgets/error_widget.dart';
 import 'package:flutter_tech_task/presentation/widgets/loading_widget.dart';
 import 'package:flutter_tech_task/presentation/widgets/post_list_item.dart';
@@ -49,18 +49,8 @@ class _PostListPageState extends ConsumerState<PostListPage> {
         ),
         loading: () => const LoadingWidget(),
         error: (error, stackTrace) {
-          String errorMessage = 'An error occurred';
-          if (error is ServerFailure) {
-            errorMessage = error.message;
-          } else if (error is NetworkFailure) {
-            errorMessage = error.message;
-          } else if (error is CacheFailure) {
-            errorMessage = error.message;
-          } else {
-            errorMessage = error.toString();
-          }
           return ErrorDisplayWidget(
-            message: errorMessage,
+            message: extractErrorMessage(error),
             onRetry: () {
               ref.read(postListViewModelProvider.notifier).loadPosts();
             },

@@ -37,9 +37,6 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
     } on ServerFailure {
       rethrow;
     } catch (e) {
-      if (e is ServerFailure) {
-        rethrow;
-      }
       throw NetworkFailure('Network error: ${e.toString()}');
     }
   }
@@ -65,9 +62,6 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
     } on ServerFailure {
       rethrow;
     } catch (e) {
-      if (e is ServerFailure) {
-        rethrow;
-      }
       throw NetworkFailure('Network error: ${e.toString()}');
     }
   }
