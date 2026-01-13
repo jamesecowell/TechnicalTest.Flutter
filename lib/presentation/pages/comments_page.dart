@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tech_task/core/providers/providers.dart';
 import 'package:flutter_tech_task/presentation/utils/error_message_extractor.dart';
 import 'package:flutter_tech_task/presentation/widgets/comment_list_item.dart';
@@ -38,7 +39,7 @@ class _CommentsPageState extends ConsumerState<CommentsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Comments'),
+        title: Text(AppLocalizations.of(context)!.comments),
       ),
       body: commentsState.when(
         data: (comments) => ListView.builder(
@@ -61,4 +62,3 @@ class _CommentsPageState extends ConsumerState<CommentsPage> {
     );
   }
 }
-

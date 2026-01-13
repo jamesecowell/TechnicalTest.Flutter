@@ -1,50 +1,50 @@
 {
-  "@@locale": "en",
+  "@@locale": "es",
   "appTitle": "Flutter Demo",
   "@appTitle": {
     "description": "The application title"
   },
-  "posts": "Posts",
+  "posts": "Publicaciones",
   "@posts": {
     "description": "Title for the posts tab page"
   },
-  "allPosts": "All Posts",
+  "allPosts": "Todas las publicaciones",
   "@allPosts": {
     "description": "Tab label for all posts"
   },
-  "offline": "Offline",
+  "offline": "Sin conexión",
   "@offline": {
     "description": "Tab label for offline posts"
   },
-  "listOfPosts": "List of posts",
+  "listOfPosts": "Lista de publicaciones",
   "@listOfPosts": {
     "description": "Title for the posts list page"
   },
-  "postDetails": "Post details",
+  "postDetails": "Detalles de la publicación",
   "@postDetails": {
     "description": "Title for the post details page"
   },
-  "viewComments": "View Comments",
+  "viewComments": "Ver comentarios",
   "@viewComments": {
     "description": "Button text to view comments"
   },
-  "saveForOffline": "Save for offline",
+  "saveForOffline": "Guardar para sin conexión",
   "@saveForOffline": {
     "description": "Tooltip for saving post offline"
   },
-  "removeFromOffline": "Remove from offline",
+  "removeFromOffline": "Eliminar de sin conexión",
   "@removeFromOffline": {
     "description": "Tooltip for removing post from offline"
   },
-  "comments": "Comments",
+  "comments": "Comentarios",
   "@comments": {
     "description": "Title for the comments page"
   },
-  "retry": "Retry",
+  "retry": "Reintentar",
   "@retry": {
     "description": "Retry button text"
   },
-  "errorOccurred": "An error occurred",
+  "errorOccurred": "Ocurrió un error",
   "@errorOccurred": {
     "description": "Generic error message"
   }

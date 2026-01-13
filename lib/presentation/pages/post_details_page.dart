@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tech_task/core/providers/providers.dart';
 import 'package:flutter_tech_task/presentation/utils/error_message_extractor.dart';
 import 'package:flutter_tech_task/presentation/widgets/error_widget.dart';
@@ -89,7 +90,7 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Post details'),
+        title: Text(AppLocalizations.of(context)!.postDetails),
         actions: [
           postState.when(
             data: (post) => savedStatus.when(
@@ -102,7 +103,9 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                       .read(offlinePostListViewModelProvider.notifier)
                       .loadOfflinePosts();
                 },
-                tooltip: isSaved ? 'Remove from offline' : 'Save for offline',
+                tooltip: isSaved
+                    ? AppLocalizations.of(context)!.removeFromOffline
+                    : AppLocalizations.of(context)!.saveForOffline,
               ),
               loading: () => const Padding(
                 padding: EdgeInsets.all(16.0),
@@ -124,7 +127,7 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                         .loadOfflinePosts();
                   }
                 },
-                tooltip: 'Save for offline',
+                tooltip: AppLocalizations.of(context)!.saveForOffline,
               ),
             ),
             loading: () => const SizedBox.shrink(),
@@ -159,7 +162,7 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                       arguments: {'postId': post.id},
                     );
                   },
-                  child: const Text('View Comments'),
+                  child: Text(AppLocalizations.of(context)!.viewComments),
                 ),
               ),
             ],
