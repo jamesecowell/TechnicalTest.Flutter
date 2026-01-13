@@ -42,7 +42,7 @@ class CommentsViewModel extends StateNotifier<AsyncValue<List<Comment>>> {
         }
         await Future.delayed(const Duration(milliseconds: 300));
         if (mounted) {
-          loadComments(postId);
+          await loadComments(postId);
         }
         return;
       }
