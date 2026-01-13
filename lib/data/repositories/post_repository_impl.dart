@@ -1,14 +1,20 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_tech_task/core/error/failures.dart';
+import 'package:flutter_tech_task/data/datasources/post_local_data_source.dart';
 import 'package:flutter_tech_task/data/datasources/post_remote_data_source.dart';
+import 'package:flutter_tech_task/data/models/post_model.dart';
 import 'package:flutter_tech_task/domain/entities/comment.dart';
 import 'package:flutter_tech_task/domain/entities/post.dart';
 import 'package:flutter_tech_task/domain/repositories/post_repository.dart';
 
 class PostRepositoryImpl implements PostRepository {
   final PostRemoteDataSource remoteDataSource;
+  final PostLocalDataSource localDataSource;
 
-  PostRepositoryImpl({required this.remoteDataSource});
+  PostRepositoryImpl({
+    required this.remoteDataSource,
+    required this.localDataSource,
+  });
 
   @override
   Future<Either<Failure, List<Post>>> getPosts() async {
@@ -49,6 +55,72 @@ class PostRepositoryImpl implements PostRepository {
       return Left(failure);
     } catch (e) {
       return Left(ServerFailure('Unexpected error: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> savePostForOffline(Post post) async {
+    try {
+      final postModel = PostModel(
+        id: post.id,
+        userId: post.userId,
+        title: post.title,
+        body: post.body,
+      );
+      await localDataSource.savePost(postModel);
+      return const Right(null);
+    } on CacheFailure catch (failure) {
+      return Left(failure);
+    } catch (e) {
+      return Left(CacheFailure('Unexpected error: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> unsavePostForOffline(int postId) async {
+    try {
+      await localDataSource.deletePost(postId);
+      return const Right(null);
+    } on CacheFailure catch (failure) {
+      return Left(failure);
+    } catch (e) {
+      return Left(CacheFailure('Unexpected error: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> isPostSavedForOffline(int postId) async {
+    try {
+      final isSaved = await localDataSource.isPostSaved(postId);
+      return Right(isSaved);
+    } on CacheFailure catch (failure) {
+      return Left(failure);
+    } catch (e) {
+      return Left(CacheFailure('Unexpected error: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Post>>> getOfflinePosts() async {
+    try {
+      final offlinePosts = await localDataSource.getOfflinePosts();
+      return Right(offlinePosts.map((model) => model.toEntity()).toList());
+    } on CacheFailure catch (failure) {
+      return Left(failure);
+    } catch (e) {
+      return Left(CacheFailure('Unexpected error: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> getOfflinePostCount() async {
+    try {
+      final count = await localDataSource.getOfflinePostCount();
+      return Right(count);
+    } on CacheFailure catch (failure) {
+      return Left(failure);
+    } catch (e) {
+      return Left(CacheFailure('Unexpected error: ${e.toString()}'));
     }
   }
 }

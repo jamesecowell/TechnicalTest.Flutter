@@ -1,28 +1,27 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tech_task/domain/entities/post.dart';
-import 'package:flutter_tech_task/domain/usecases/get_posts.dart';
+import 'package:flutter_tech_task/domain/usecases/get_offline_posts.dart';
 
-class PostListViewModel extends StateNotifier<AsyncValue<List<Post>>> {
-  final GetPosts getPosts;
+class OfflinePostListViewModel extends StateNotifier<AsyncValue<List<Post>>> {
+  final GetOfflinePosts getOfflinePosts;
   static const int _maxRetryAttempts = 10;
   int _retryCount = 0;
 
-  PostListViewModel({required this.getPosts})
+  OfflinePostListViewModel({required this.getOfflinePosts})
       : super(const AsyncValue.loading()) {
     // Auto-load when ViewModel is created with real repository
-    // Delay slightly to ensure ViewModel is fully initialized
     Future.microtask(() {
       if (mounted) {
-        loadPosts();
+        loadOfflinePosts();
       }
     });
   }
 
-  Future<void> loadPosts() async {
+  Future<void> loadOfflinePosts() async {
     if (!mounted) return;
     state = const AsyncValue.loading();
     try {
-      final result = await getPosts();
+      final result = await getOfflinePosts();
       if (!mounted) return;
       // Reset retry count on success
       _retryCount = 0;
@@ -32,22 +31,19 @@ class PostListViewModel extends StateNotifier<AsyncValue<List<Post>>> {
       );
     } catch (e, stackTrace) {
       if (!mounted) return;
-      // If repository not ready yet, wait and retry (with max attempts)
-      if (e is UnimplementedError &&
-          (e.message?.contains('not initialized') ?? false)) {
+      if (e is UnimplementedError && (e.message?.contains('not initialized') ?? false)) {
         _retryCount++;
         if (_retryCount >= _maxRetryAttempts) {
           // Max retries reached, show error
           state = AsyncValue.error(
-            Exception(
-                'Failed to initialize repository after $_maxRetryAttempts attempts'),
+            Exception('Failed to initialize repository after $_maxRetryAttempts attempts'),
             stackTrace,
           );
           return;
         }
         await Future.delayed(const Duration(milliseconds: 300));
         if (mounted) {
-          loadPosts();
+          loadOfflinePosts();
         }
         return;
       }
@@ -57,3 +53,4 @@ class PostListViewModel extends StateNotifier<AsyncValue<List<Post>>> {
     }
   }
 }
+

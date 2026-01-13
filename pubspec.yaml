@@ -26,6 +26,10 @@ dependencies:
   # Utilities
   equatable: ^2.0.5
   dartz: ^0.10.1
+  
+  # Local storage
+  sqflite: ^2.3.0
+  path: ^1.8.3
 
 dev_dependencies:
   flutter_test:
@@ -38,6 +42,7 @@ dev_dependencies:
   
   # Testing
   mocktail: ^1.0.0
+  sqflite_common_ffi: ^2.3.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
