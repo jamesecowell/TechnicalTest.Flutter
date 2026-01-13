@@ -218,15 +218,8 @@ final commentsViewModelProvider =
 // Provider for saved status - separate StateNotifierProvider that the ViewModel can update
 final postDetailsSavedStatusProvider =
     StateNotifierProvider<SavedStatusNotifier, AsyncValue<bool>>((ref) {
-  // Create a StateNotifier for saved status
-  final notifier = SavedStatusNotifier();
-
-  // Get the ViewModel and connect its savedStatusNotifier to this provider
-  final viewModel = ref.watch(postDetailsViewModelProvider.notifier);
-  // Replace the ViewModel's savedStatusNotifier with this one so updates propagate
-  viewModel.savedStatusNotifier = notifier;
-
-  return notifier;
+  // Create and expose a StateNotifier for saved status
+  return SavedStatusNotifier();
 });
 
 // Placeholder repository for initialization
