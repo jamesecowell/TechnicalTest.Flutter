@@ -17,17 +17,29 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
   @override
   Future<List<PostModel>> getPosts() async {
     try {
-      final response = await client.get(Uri.parse(ApiConstants.getPostsUrl()));
+      final uri = Uri.parse(ApiConstants.getPostsUrl());
+      final response = await client.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      );
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonList = json.decode(response.body);
-        return jsonList.map((json) => PostModel.fromJson(json as Map<String, dynamic>)).toList();
+        return jsonList
+            .map((json) => PostModel.fromJson(json as Map<String, dynamic>))
+            .toList();
       } else {
         throw ServerFailure('Server error: ${response.statusCode}');
       }
     } on ServerFailure {
       rethrow;
     } catch (e) {
+      if (e is ServerFailure) {
+        rethrow;
+      }
       throw NetworkFailure('Network error: ${e.toString()}');
     }
   }
@@ -35,7 +47,14 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
   @override
   Future<PostModel> getPostById(int id) async {
     try {
-      final response = await client.get(Uri.parse(ApiConstants.getPostByIdUrl(id)));
+      final uri = Uri.parse(ApiConstants.getPostByIdUrl(id));
+      final response = await client.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      );
 
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body) as Map<String, dynamic>;
@@ -46,8 +65,10 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
     } on ServerFailure {
       rethrow;
     } catch (e) {
+      if (e is ServerFailure) {
+        rethrow;
+      }
       throw NetworkFailure('Network error: ${e.toString()}');
     }
   }
 }
-

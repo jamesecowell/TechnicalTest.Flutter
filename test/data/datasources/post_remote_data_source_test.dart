@@ -42,7 +42,7 @@ void main() {
         'should return list of PostModels when the call to remote API is successful',
         () async {
       // Arrange
-      when(() => mockHttpClient.get(any()))
+      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
           .thenAnswer((_) async => http.Response(jsonEncode(tPostsJson), 200));
 
       // Act
@@ -53,15 +53,17 @@ void main() {
       expect(result.length, 2);
       expect(result[0].id, 1);
       expect(result[1].id, 2);
-      verify(() => mockHttpClient.get(Uri.parse(ApiConstants.getPostsUrl())))
-          .called(1);
+      verify(() => mockHttpClient.get(
+            Uri.parse(ApiConstants.getPostsUrl()),
+            headers: any(named: 'headers'),
+          )).called(1);
     });
 
     test(
         'should throw ServerFailure when the call to remote API is unsuccessful',
         () async {
       // Arrange
-      when(() => mockHttpClient.get(any()))
+      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
           .thenAnswer((_) async => http.Response('Server Error', 500));
 
       // Act
@@ -69,14 +71,17 @@ void main() {
 
       // Assert
       expect(() => call(), throwsA(isA<ServerFailure>()));
-      verify(() => mockHttpClient.get(Uri.parse(ApiConstants.getPostsUrl())))
-          .called(1);
+      verify(() => mockHttpClient.get(
+            Uri.parse(ApiConstants.getPostsUrl()),
+            headers: any(named: 'headers'),
+          )).called(1);
     });
 
     test('should throw NetworkFailure when there is no internet connection',
         () async {
       // Arrange
-      when(() => mockHttpClient.get(any())).thenThrow(Exception('No Internet'));
+      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
+          .thenThrow(Exception('No Internet'));
 
       // Act
       final call = dataSource.getPosts;
@@ -98,7 +103,7 @@ void main() {
     test('should return PostModel when the call to remote API is successful',
         () async {
       // Arrange
-      when(() => mockHttpClient.get(any()))
+      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
           .thenAnswer((_) async => http.Response(jsonEncode(tPostJson), 200));
 
       // Act
@@ -108,30 +113,33 @@ void main() {
       expect(result, isA<PostModel>());
       expect(result.id, tId);
       expect(result.title, 'Test Title');
-      verify(() =>
-              mockHttpClient.get(Uri.parse(ApiConstants.getPostByIdUrl(tId))))
-          .called(1);
+      verify(() => mockHttpClient.get(
+            Uri.parse(ApiConstants.getPostByIdUrl(tId)),
+            headers: any(named: 'headers'),
+          )).called(1);
     });
 
     test(
         'should throw ServerFailure when the call to remote API is unsuccessful',
         () async {
       // Arrange
-      when(() => mockHttpClient.get(any()))
+      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
           .thenAnswer((_) async => http.Response('Not Found', 404));
 
       // Act & Assert
       Future<PostModel> call() => dataSource.getPostById(tId);
       expect(call, throwsA(isA<ServerFailure>()));
-      verify(() =>
-              mockHttpClient.get(Uri.parse(ApiConstants.getPostByIdUrl(tId))))
-          .called(1);
+      verify(() => mockHttpClient.get(
+            Uri.parse(ApiConstants.getPostByIdUrl(tId)),
+            headers: any(named: 'headers'),
+          )).called(1);
     });
 
     test('should throw NetworkFailure when there is no internet connection',
         () async {
       // Arrange
-      when(() => mockHttpClient.get(any())).thenThrow(Exception('No Internet'));
+      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
+          .thenThrow(Exception('No Internet'));
 
       // Act & Assert
       Future<PostModel> call() => dataSource.getPostById(tId);

@@ -11,6 +11,14 @@
   "postDetails": "Post details",
   "@postDetails": {
     "description": "Title for the post details page"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "errorOccurred": "An error occurred",
+  "@errorOccurred": {
+    "description": "Generic error message"
   }
 }
 
