@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_tech_task/presentation/pages/post_list_page.dart';
+import 'package:flutter_tech_task/presentation/pages/post_list_tab_page.dart';
 import 'package:flutter_tech_task/presentation/pages/post_details_page.dart';
 import 'package:flutter_tech_task/presentation/pages/comments_page.dart';
 
@@ -31,9 +31,9 @@ class MyApp extends StatelessWidget {
       supportedLocales: const [
         Locale('en', ''),
       ],
-      initialRoute: 'list/',
+      initialRoute: 'tabs/',
       routes: {
-        'list/': (context) => const PostListPage(),
+        'tabs/': (context) => const PostListTabPage(),
         'details/': (context) => const PostDetailsPage(),
         'comments/': (context) => const CommentsPage(),
       },

@@ -6,27 +6,28 @@ import 'package:flutter_tech_task/presentation/widgets/error_widget.dart';
 import 'package:flutter_tech_task/presentation/widgets/loading_widget.dart';
 import 'package:flutter_tech_task/presentation/widgets/post_list_item.dart';
 
-class PostListPage extends ConsumerStatefulWidget {
-  const PostListPage({Key? key}) : super(key: key);
+class OfflinePostListPage extends ConsumerStatefulWidget {
+  const OfflinePostListPage({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<PostListPage> createState() => _PostListPageState();
+  ConsumerState<OfflinePostListPage> createState() =>
+      _OfflinePostListPageState();
 }
 
-class _PostListPageState extends ConsumerState<PostListPage> {
+class _OfflinePostListPageState extends ConsumerState<OfflinePostListPage> {
   @override
   void initState() {
     super.initState();
     // ViewModel will auto-load when created with real repository
     // But also try to load in case it's already ready
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(postListViewModelProvider.notifier).loadPosts();
+      ref.read(offlinePostListViewModelProvider.notifier).loadOfflinePosts();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final postsState = ref.watch(postListViewModelProvider);
+    final postsState = ref.watch(offlinePostListViewModelProvider);
 
     return Scaffold(
       body: postsState.when(
@@ -50,7 +51,9 @@ class _PostListPageState extends ConsumerState<PostListPage> {
           return ErrorDisplayWidget(
             message: extractErrorMessage(error),
             onRetry: () {
-              ref.read(postListViewModelProvider.notifier).loadPosts();
+              ref
+                  .read(offlinePostListViewModelProvider.notifier)
+                  .loadOfflinePosts();
             },
           );
         },

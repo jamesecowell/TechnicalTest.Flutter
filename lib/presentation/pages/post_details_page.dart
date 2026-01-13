@@ -13,12 +13,15 @@ class PostDetailsPage extends ConsumerStatefulWidget {
 }
 
 class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
+  int? _postId;
+  bool _hasRetriedAfterReady = false;
+
   void _loadPostFromArguments() {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
-    final postId = args?['id'] as int?;
-    if (postId != null) {
-      ref.read(postDetailsViewModelProvider.notifier).loadPost(postId);
+    _postId = args?['id'] as int?;
+    if (_postId != null) {
+      ref.read(postDetailsViewModelProvider.notifier).loadPost(_postId!);
     }
   }
 
@@ -34,10 +37,76 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
   @override
   Widget build(BuildContext context) {
     final postState = ref.watch(postDetailsViewModelProvider);
+    final viewModel = ref.watch(postDetailsViewModelProvider.notifier);
+    final savedStatus = ref.watch(postDetailsSavedStatusProvider);
+
+    // Watch use case providers - when they become ready, retry loading if needed
+    final getPostByIdAsync = ref.watch(getPostByIdProvider);
+    getPostByIdAsync.maybeWhen(
+      data: (_) {
+        // Use case is ready - if we have a postId, state is loading, and we haven't retried yet
+        if (_postId != null && postState.isLoading && !_hasRetriedAfterReady) {
+          _hasRetriedAfterReady = true;
+          Future.microtask(() {
+            if (mounted && _postId != null) {
+              final currentState = ref.read(postDetailsViewModelProvider);
+              // Only retry if still loading (might be a new ViewModel instance)
+              if (currentState.isLoading) {
+                ref
+                    .read(postDetailsViewModelProvider.notifier)
+                    .loadPost(_postId!);
+              }
+            }
+          });
+        }
+      },
+      orElse: () {},
+    );
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Post details'),
+        actions: [
+          postState.when(
+            data: (post) => savedStatus.when(
+              data: (isSaved) => IconButton(
+                icon: Icon(isSaved ? Icons.bookmark : Icons.bookmark_border),
+                onPressed: () async {
+                  await viewModel.toggleSavePost(post);
+                  // Refresh offline post list to update badge count
+                  ref
+                      .read(offlinePostListViewModelProvider.notifier)
+                      .loadOfflinePosts();
+                },
+                tooltip: isSaved ? 'Remove from offline' : 'Save for offline',
+              ),
+              loading: () => const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+              ),
+              error: (_, __) => IconButton(
+                icon: const Icon(Icons.bookmark_border),
+                onPressed: () async {
+                  final post = postState.value;
+                  if (post != null) {
+                    await viewModel.toggleSavePost(post);
+                    // Refresh offline post list to update badge count
+                    ref
+                        .read(offlinePostListViewModelProvider.notifier)
+                        .loadOfflinePosts();
+                  }
+                },
+                tooltip: 'Save for offline',
+              ),
+            ),
+            loading: () => const SizedBox.shrink(),
+            error: (_, __) => const SizedBox.shrink(),
+          ),
+        ],
       ),
       body: postState.when(
         data: (post) => Container(
