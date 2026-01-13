@@ -18,7 +18,7 @@
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
-#.vscode/
+.vscode/
 
 # Flutter/Dart/Pub related
 **/doc/api/
@@ -31,8 +31,26 @@
 .pub/
 /build/
 
+# Code generation (Riverpod, build_runner, mocktail, etc.)
+*.g.dart
+*.freezed.dart
+*.mocks.dart
+*.config.dart
+
+# Build runner
+.dart_tool/build/
+.dart_tool/flutter_build/
+
+# Flutter generated files
+.dart_tool/flutter_gen/
+
 # Web related
 lib/generated_plugin_registrant.dart
+
+# Localization generated files (optional - uncomment if you don't want to commit generated files)
+# lib/l10n/*.dart
+# lib/l10n/*.g.dart
+# Note: Generated localization files are in .dart_tool/flutter_gen/ which is already ignored above
 
 # Symbolication related
 app.*.symbols
@@ -44,3 +62,20 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# iOS/macOS
+**/ios/Pods/
+**/ios/.symlinks/
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/ephemeral/
+**/macos/Flutter/GeneratedPluginRegistrant.swift
+**/macos/Flutter/ephemeral/
+
+# Coverage
+coverage/
+*.lcov
+
+# Test related
+test/.test_coverage.dart
