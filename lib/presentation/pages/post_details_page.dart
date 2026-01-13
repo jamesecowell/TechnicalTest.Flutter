@@ -25,6 +25,27 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
     }
   }
 
+  void _retryLoadIfNeeded() {
+    if (_postId == null || _hasRetriedAfterReady) return;
+
+    final postState = ref.read(postDetailsViewModelProvider);
+    final getPostByIdAsync = ref.read(getPostByIdProvider);
+
+    // Only retry if use case is ready and state is still loading
+    if (getPostByIdAsync.hasValue && postState.isLoading) {
+      _hasRetriedAfterReady = true;
+      Future.microtask(() {
+        if (mounted && _postId != null) {
+          final currentState = ref.read(postDetailsViewModelProvider);
+          // Only retry if still loading (might be a new ViewModel instance)
+          if (currentState.isLoading) {
+            ref.read(postDetailsViewModelProvider.notifier).loadPost(_postId!);
+          }
+        }
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -35,32 +56,35 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Try to retry loading when dependencies change (e.g., when providers become ready)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _retryLoadIfNeeded();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final postState = ref.watch(postDetailsViewModelProvider);
     final viewModel = ref.watch(postDetailsViewModelProvider.notifier);
     final savedStatus = ref.watch(postDetailsSavedStatusProvider);
 
-    // Watch use case providers - when they become ready, retry loading if needed
-    final getPostByIdAsync = ref.watch(getPostByIdProvider);
-    getPostByIdAsync.maybeWhen(
-      data: (_) {
-        // Use case is ready - if we have a postId, state is loading, and we haven't retried yet
-        if (_postId != null && postState.isLoading && !_hasRetriedAfterReady) {
-          _hasRetriedAfterReady = true;
-          Future.microtask(() {
-            if (mounted && _postId != null) {
-              final currentState = ref.read(postDetailsViewModelProvider);
-              // Only retry if still loading (might be a new ViewModel instance)
-              if (currentState.isLoading) {
-                ref
-                    .read(postDetailsViewModelProvider.notifier)
-                    .loadPost(_postId!);
-              }
-            }
+    // Watch the use case provider to trigger didChangeDependencies when it changes
+    ref.watch(getPostByIdProvider);
+
+    // Listen for when the use case provider becomes ready and retry if needed
+    // Note: ref.listen is called in build but is the Riverpod pattern for side effects
+    ref.listen<AsyncValue<dynamic>>(
+      getPostByIdProvider,
+      (previous, next) {
+        // When provider transitions from loading to data, schedule retry check
+        if (previous?.isLoading == true && next.hasValue) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _retryLoadIfNeeded();
           });
         }
       },
-      orElse: () {},
     );
 
     return Scaffold(

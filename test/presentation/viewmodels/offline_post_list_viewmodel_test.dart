@@ -12,9 +12,17 @@ void main() {
   late OfflinePostListViewModel viewModel;
   late MockGetOfflinePosts mockGetOfflinePosts;
 
-  setUp(() {
+  setUp(() async {
     mockGetOfflinePosts = MockGetOfflinePosts();
+    // Setup default mock response to handle auto-load in constructor
+    when(() => mockGetOfflinePosts()).thenAnswer((_) async => const Right(<Post>[]));
     viewModel = OfflinePostListViewModel(getOfflinePosts: mockGetOfflinePosts);
+    // Wait for auto-load to complete
+    await Future.delayed(const Duration(milliseconds: 50));
+    // Clear previous verifications
+    reset(mockGetOfflinePosts);
+    // Re-setup default mock response
+    when(() => mockGetOfflinePosts()).thenAnswer((_) async => const Right(<Post>[]));
   });
 
   group('loadOfflinePosts', () {

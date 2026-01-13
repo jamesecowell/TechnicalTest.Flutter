@@ -1,5 +1,6 @@
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_tech_task/core/error/failures.dart';
 import 'package:flutter_tech_task/domain/entities/post.dart';
@@ -156,9 +157,38 @@ void main() {
       body: 'Test Body',
     );
 
+    /// Helper function to wait for savedStatus to complete (not loading)
+    Future<void> _waitForSavedStatusToComplete() async {
+      const maxWaitTime = Duration(seconds: 1);
+      const pollInterval = Duration(milliseconds: 10);
+      final endTime = DateTime.now().add(maxWaitTime);
+
+      while (DateTime.now().isBefore(endTime)) {
+        if (!viewModel.savedStatus.isLoading) {
+          return;
+        }
+        await Future.delayed(pollInterval);
+      }
+
+      throw TimeoutException(
+        'Saved status did not complete within ${maxWaitTime.inSeconds} seconds',
+        maxWaitTime,
+      );
+    }
+
     test('should save post when not saved', () async {
-      // Arrange
-      viewModel.savedStatusNotifier.state = const AsyncValue.data(false);
+      // Arrange - set up initial saved status using the ViewModel's method
+      when(() => mockIsPostSavedForOffline(any()))
+          .thenAnswer((_) async => const Right(false));
+      await viewModel.checkSavedStatus(tPost.id);
+
+      // Verify initial state
+      expect(viewModel.savedStatus.value, false);
+
+      // Reset mock to clear previous verifications
+      reset(mockIsPostSavedForOffline);
+
+      // Setup mocks for toggle operation
       when(() => mockSavePostForOffline(any()))
           .thenAnswer((_) async => const Right(null));
       when(() => mockIsPostSavedForOffline(any()))
@@ -166,19 +196,30 @@ void main() {
 
       // Act
       await viewModel.toggleSavePost(tPost);
-      // Wait a bit for the async checkSavedStatus to complete
-      await Future.delayed(const Duration(milliseconds: 10));
+      // Wait for checkSavedStatus to complete
+      await _waitForSavedStatusToComplete();
 
       // Assert
       verify(() => mockSavePostForOffline(tPost)).called(1);
       verify(() => mockIsPostSavedForOffline(
           IsPostSavedForOfflineParams(postId: tPost.id))).called(1);
+      expect(viewModel.savedStatus.hasValue, true);
       expect(viewModel.savedStatus.value, true);
     });
 
     test('should unsave post when saved', () async {
-      // Arrange
-      viewModel.savedStatusNotifier.state = const AsyncValue.data(true);
+      // Arrange - set up initial saved status using the ViewModel's method
+      when(() => mockIsPostSavedForOffline(any()))
+          .thenAnswer((_) async => const Right(true));
+      await viewModel.checkSavedStatus(tPost.id);
+
+      // Verify initial state
+      expect(viewModel.savedStatus.value, true);
+
+      // Reset mock to clear previous verifications
+      reset(mockIsPostSavedForOffline);
+
+      // Setup mocks for toggle operation
       when(() => mockUnsavePostForOffline(any()))
           .thenAnswer((_) async => const Right(null));
       when(() => mockIsPostSavedForOffline(any()))
@@ -186,14 +227,15 @@ void main() {
 
       // Act
       await viewModel.toggleSavePost(tPost);
-      // Wait a bit for the async checkSavedStatus to complete
-      await Future.delayed(const Duration(milliseconds: 10));
+      // Wait for checkSavedStatus to complete
+      await _waitForSavedStatusToComplete();
 
       // Assert
       verify(() => mockUnsavePostForOffline(
           UnsavePostForOfflineParams(postId: tPost.id))).called(1);
       verify(() => mockIsPostSavedForOffline(
           IsPostSavedForOfflineParams(postId: tPost.id))).called(1);
+      expect(viewModel.savedStatus.hasValue, true);
       expect(viewModel.savedStatus.value, false);
     });
   });

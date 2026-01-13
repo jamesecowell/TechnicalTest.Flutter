@@ -12,9 +12,17 @@ void main() {
   late PostListViewModel viewModel;
   late MockGetPosts mockGetPosts;
 
-  setUp(() {
+  setUp(() async {
     mockGetPosts = MockGetPosts();
+    // Setup default mock response to handle auto-load in constructor
+    when(() => mockGetPosts()).thenAnswer((_) async => const Right(<Post>[]));
     viewModel = PostListViewModel(getPosts: mockGetPosts);
+    // Wait for auto-load to complete
+    await Future.delayed(const Duration(milliseconds: 50));
+    // Clear previous verifications
+    reset(mockGetPosts);
+    // Re-setup default mock response
+    when(() => mockGetPosts()).thenAnswer((_) async => const Right(<Post>[]));
   });
 
   group('loadPosts', () {
