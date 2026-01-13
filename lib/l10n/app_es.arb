@@ -1,0 +1,52 @@
+{
+  "@@locale": "es",
+  "appTitle": "Flutter Demo",
+  "@appTitle": {
+    "description": "The application title"
+  },
+  "posts": "Publicaciones",
+  "@posts": {
+    "description": "Title for the posts tab page"
+  },
+  "allPosts": "Todas las publicaciones",
+  "@allPosts": {
+    "description": "Tab label for all posts"
+  },
+  "offline": "Sin conexión",
+  "@offline": {
+    "description": "Tab label for offline posts"
+  },
+  "listOfPosts": "Lista de publicaciones",
+  "@listOfPosts": {
+    "description": "Title for the posts list page"
+  },
+  "postDetails": "Detalles de la publicación",
+  "@postDetails": {
+    "description": "Title for the post details page"
+  },
+  "viewComments": "Ver comentarios",
+  "@viewComments": {
+    "description": "Button text to view comments"
+  },
+  "saveForOffline": "Guardar para sin conexión",
+  "@saveForOffline": {
+    "description": "Tooltip for saving post offline"
+  },
+  "removeFromOffline": "Eliminar de sin conexión",
+  "@removeFromOffline": {
+    "description": "Tooltip for removing post from offline"
+  },
+  "comments": "Comentarios",
+  "@comments": {
+    "description": "Title for the comments page"
+  },
+  "retry": "Reintentar",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "errorOccurred": "Ocurrió un error",
+  "@errorOccurred": {
+    "description": "Generic error message"
+  }
+}
+

@@ -21,6 +21,28 @@ class PostListTabPage extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(AppLocalizations.of(context)!.posts),
+          actions: [
+            PopupMenuButton<Locale>(
+              icon: const Icon(Icons.language),
+              onSelected: (Locale locale) {
+                ref.read(localeProvider.notifier).setLocale(locale);
+              },
+              itemBuilder: (BuildContext context) => [
+                const PopupMenuItem<Locale>(
+                  value: Locale('en', ''),
+                  child: Text('English'),
+                ),
+                const PopupMenuItem<Locale>(
+                  value: Locale('es', ''),
+                  child: Text('Español'),
+                ),
+                const PopupMenuItem<Locale>(
+                  value: Locale('de', ''),
+                  child: Text('Deutsch'),
+                ),
+              ],
+            ),
+          ],
           bottom: TabBar(
             tabs: [
               Tab(text: AppLocalizations.of(context)!.allPosts),

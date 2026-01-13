@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:sqflite/sqflite.dart';
@@ -23,6 +24,19 @@ import 'package:flutter_tech_task/presentation/viewmodels/post_list_viewmodel.da
 import 'package:flutter_tech_task/presentation/viewmodels/post_details_viewmodel.dart';
 import 'package:flutter_tech_task/presentation/viewmodels/comments_viewmodel.dart';
 import 'package:flutter_tech_task/presentation/viewmodels/offline_post_list_viewmodel.dart';
+
+// Locale Provider
+final localeProvider = StateNotifierProvider<LocaleNotifier, Locale>((ref) {
+  return LocaleNotifier();
+});
+
+class LocaleNotifier extends StateNotifier<Locale> {
+  LocaleNotifier() : super(const Locale('en', ''));
+
+  void setLocale(Locale locale) {
+    state = locale;
+  }
+}
 
 // HTTP Client Provider
 final httpClientProvider = Provider<http.Client>((ref) => http.Client());
