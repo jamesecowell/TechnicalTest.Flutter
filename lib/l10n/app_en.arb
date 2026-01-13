@@ -1,0 +1,16 @@
+{
+  "@@locale": "en",
+  "appTitle": "Flutter Demo",
+  "@appTitle": {
+    "description": "The application title"
+  },
+  "listOfPosts": "List of posts",
+  "@listOfPosts": {
+    "description": "Title for the posts list page"
+  },
+  "postDetails": "Post details",
+  "@postDetails": {
+    "description": "Title for the post details page"
+  }
+}
+

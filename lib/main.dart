@@ -2,10 +2,15 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -64,10 +69,11 @@ class _DetailsPageState extends State<DetailsPage> {
                   child: Column(children: [
                     Text(
                       data['title'],
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     Container(height: 10),
-                    Text(data['body'], style:  const TextStyle(fontSize: 16))
+                    Text(data['body'], style: const TextStyle(fontSize: 16))
                   ])),
             );
           } else {
@@ -86,7 +92,6 @@ class _ListPageState extends State<ListPage> {
     http
         .get(Uri.parse('https://jsonplaceholder.typicode.com/posts/'))
         .then((response) {
-
       setState(() {
         posts = json.decode(response.body);
       });

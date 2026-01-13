@@ -31,8 +31,21 @@
 .pub/
 /build/
 
+# Code generation (Riverpod, build_runner, mockito, etc.)
+*.g.dart
+*.freezed.dart
+*.mocks.dart
+*.config.dart
+
+# Build runner
+.dart_tool/build/
+
 # Web related
 lib/generated_plugin_registrant.dart
+
+# Localization generated files (optional - uncomment if you don't want to commit generated files)
+# lib/l10n/*.dart
+# lib/l10n/*.g.dart
 
 # Symbolication related
 app.*.symbols
@@ -44,3 +57,20 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# iOS/macOS
+**/ios/Pods/
+**/ios/.symlinks/
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/ephemeral/
+**/macos/Flutter/GeneratedPluginRegistrant.swift
+**/macos/Flutter/ephemeral/
+
+# Coverage
+coverage/
+*.lcov
+
+# Test related
+test/.test_coverage.dart
