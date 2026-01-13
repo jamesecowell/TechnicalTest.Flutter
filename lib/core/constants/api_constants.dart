@@ -5,5 +5,6 @@ class ApiConstants {
   
   static String getPostByIdUrl(int id) => '$baseUrl$postsEndpoint/$id';
   static String getPostsUrl() => '$baseUrl$postsEndpoint';
+  static String getCommentsByPostIdUrl(int postId) => '$baseUrl$postsEndpoint/$postId/comments';
 }
 

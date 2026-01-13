@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_tech_task/presentation/pages/post_list_page.dart';
 import 'package:flutter_tech_task/presentation/pages/post_details_page.dart';
+import 'package:flutter_tech_task/presentation/pages/comments_page.dart';
 
 void main() {
   runApp(
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
       routes: {
         'list/': (context) => const PostListPage(),
         'details/': (context) => const PostDetailsPage(),
+        'comments/': (context) => const CommentsPage(),
       },
     );
   }
