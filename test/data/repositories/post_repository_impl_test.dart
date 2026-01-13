@@ -2,8 +2,10 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_tech_task/core/error/failures.dart';
 import 'package:flutter_tech_task/data/datasources/post_remote_data_source.dart';
+import 'package:flutter_tech_task/data/models/comment_model.dart';
 import 'package:flutter_tech_task/data/models/post_model.dart';
 import 'package:flutter_tech_task/data/repositories/post_repository_impl.dart';
+import 'package:flutter_tech_task/domain/entities/comment.dart';
 import 'package:flutter_tech_task/domain/entities/post.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -143,6 +145,79 @@ void main() {
       // Assert
       verify(() => mockRemoteDataSource.getPostById(tId)).called(1);
       expect(result, isA<Left<Failure, Post>>());
+      result.fold(
+        (l) => expect(l, isA<NetworkFailure>()),
+        (r) => fail('should have returned Left<Failure>'),
+      );
+    });
+  });
+
+  group('getCommentsByPostId', () {
+    final tCommentModels = [
+      const CommentModel(
+        id: 1,
+        postId: 1,
+        name: 'Test Name 1',
+        email: 'test1@example.com',
+        body: 'Test Body 1',
+      ),
+      const CommentModel(
+        id: 2,
+        postId: 1,
+        name: 'Test Name 2',
+        email: 'test2@example.com',
+        body: 'Test Body 2',
+      ),
+    ];
+    const tPostId = 1;
+
+    test('should return remote data when the call to remote data source is successful', () async {
+      // Arrange
+      when(() => mockRemoteDataSource.getCommentsByPostId(tPostId))
+          .thenAnswer((_) async => tCommentModels);
+
+      // Act
+      final result = await repository.getCommentsByPostId(tPostId);
+
+      // Assert
+      verify(() => mockRemoteDataSource.getCommentsByPostId(tPostId)).called(1);
+      expect(result, isA<Right<Failure, List<Comment>>>());
+      final comments = result.fold((l) => <Comment>[], (r) => r);
+      expect(comments.length, 2);
+      expect(comments[0].id, 1);
+      expect(comments[1].id, 2);
+    });
+
+    test('should return ServerFailure when the call to remote data source is unsuccessful', () async {
+      // Arrange
+      const failure = ServerFailure('Server error');
+      when(() => mockRemoteDataSource.getCommentsByPostId(tPostId))
+          .thenThrow(failure);
+
+      // Act
+      final result = await repository.getCommentsByPostId(tPostId);
+
+      // Assert
+      verify(() => mockRemoteDataSource.getCommentsByPostId(tPostId)).called(1);
+      expect(result, isA<Left<Failure, List<Comment>>>());
+      result.fold(
+        (l) => expect(l, isA<ServerFailure>()),
+        (r) => fail('should have returned Left<Failure>'),
+      );
+    });
+
+    test('should return NetworkFailure when there is no internet connection', () async {
+      // Arrange
+      const failure = NetworkFailure('Network error');
+      when(() => mockRemoteDataSource.getCommentsByPostId(tPostId))
+          .thenThrow(failure);
+
+      // Act
+      final result = await repository.getCommentsByPostId(tPostId);
+
+      // Assert
+      verify(() => mockRemoteDataSource.getCommentsByPostId(tPostId)).called(1);
+      expect(result, isA<Left<Failure, List<Comment>>>());
       result.fold(
         (l) => expect(l, isA<NetworkFailure>()),
         (r) => fail('should have returned Left<Failure>'),
