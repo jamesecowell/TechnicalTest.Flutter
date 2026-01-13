@@ -57,6 +57,18 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                 post.body,
                 style: const TextStyle(fontSize: 16),
               ),
+              const SizedBox(height: 20),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(
+                      'comments/',
+                      arguments: {'postId': post.id},
+                    );
+                  },
+                  child: const Text('View Comments'),
+                ),
+              ),
             ],
           ),
         ),
