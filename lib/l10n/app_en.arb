@@ -4,6 +4,18 @@
   "@appTitle": {
     "description": "The application title"
   },
+  "posts": "Posts",
+  "@posts": {
+    "description": "Title for the posts tab page"
+  },
+  "allPosts": "All Posts",
+  "@allPosts": {
+    "description": "Tab label for all posts"
+  },
+  "offline": "Offline",
+  "@offline": {
+    "description": "Tab label for offline posts"
+  },
   "listOfPosts": "List of posts",
   "@listOfPosts": {
     "description": "Title for the posts list page"
@@ -11,6 +23,22 @@
   "postDetails": "Post details",
   "@postDetails": {
     "description": "Title for the post details page"
+  },
+  "viewComments": "View Comments",
+  "@viewComments": {
+    "description": "Button text to view comments"
+  },
+  "saveForOffline": "Save for offline",
+  "@saveForOffline": {
+    "description": "Tooltip for saving post offline"
+  },
+  "removeFromOffline": "Remove from offline",
+  "@removeFromOffline": {
+    "description": "Tooltip for removing post from offline"
+  },
+  "comments": "Comments",
+  "@comments": {
+    "description": "Title for the comments page"
   },
   "retry": "Retry",
   "@retry": {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tech_task/core/providers/providers.dart';
 import 'package:flutter_tech_task/presentation/pages/offline_post_list_page.dart';
 import 'package:flutter_tech_task/presentation/pages/post_list_page.dart';
@@ -19,15 +20,15 @@ class PostListTabPage extends ConsumerWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Posts'),
+          title: Text(AppLocalizations.of(context)!.posts),
           bottom: TabBar(
             tabs: [
-              const Tab(text: 'All Posts'),
+              Tab(text: AppLocalizations.of(context)!.allPosts),
               Tab(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text('Offline'),
+                    Text(AppLocalizations.of(context)!.offline),
                     if (offlinePostCount > 0)
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
@@ -66,4 +67,3 @@ class PostListTabPage extends ConsumerWidget {
     );
   }
 }
-
