@@ -17,7 +17,7 @@ class PostDetailsViewModel extends StateNotifier<AsyncValue<Post>> {
   final UnsavePostForOffline unsavePostForOffline;
 
   // Separate StateNotifier for saved status so Riverpod can observe changes
-  SavedStatusNotifier savedStatusNotifier;
+  final SavedStatusNotifier savedStatusNotifier;
   AsyncValue<bool> get savedStatus => savedStatusNotifier.state;
 
   PostDetailsViewModel({
