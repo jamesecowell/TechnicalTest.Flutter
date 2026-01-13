@@ -19,14 +19,10 @@ class CommentsViewModel extends StateNotifier<AsyncValue<List<Comment>>> {
       _retryCount = 0;
       result.fold(
         (failure) {
-          if (mounted) {
-            state = AsyncValue.error(failure, StackTrace.current);
-          }
+          state = AsyncValue.error(failure, StackTrace.current);
         },
         (comments) {
-          if (mounted) {
-            state = AsyncValue.data(comments);
-          }
+          state = AsyncValue.data(comments);
         },
       );
     } catch (e, stackTrace) {
